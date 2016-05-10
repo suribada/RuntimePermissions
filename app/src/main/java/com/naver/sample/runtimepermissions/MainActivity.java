@@ -17,6 +17,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+/**
+ * Sample Activity
+ */
 public class MainActivity extends AppCompatActivity {
 
 	private static final String LOG_TAG = "MainActivity";
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * This will throw Exception ver Lollipop
+	 * This will throw a SecurityException at the version >= Mashmallow
 	 */
 	public void onClickLocationNoPermissionCheck(View view) {
 		requestLocationUpdate();
@@ -52,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
 		permissionGuard.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 
+	/**
+	 * Sample method #1
+	 * neeeds permission ACCESS_FINE_LOCATION
+	 */
 	private void requestLocationUpdate() {
 		LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 60000, new LocationListener() {
@@ -75,8 +82,12 @@ public class MainActivity extends AppCompatActivity {
 		});
 	}
 
+	/**
+	 * Sample method #2
+	 * neeeds permission WRITE_EXTERNAL_STORAGE, READ_PHONE_STATE
+	 */
 	private void writeMyPhoneNumber() {
-		TelephonyManager telephonyManager =(TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		String phoneNumber = telephonyManager.getLine1Number();
 		File phoneFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "phone.info");
 		FileOutputStream fos = null;
@@ -84,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 			fos = new FileOutputStream(phoneFile);
 			fos.write(phoneNumber.getBytes());
 		} catch (IOException ioe) {
-			Log.e(LOG_TAG, "Could not write filen", ioe);
+			Log.e(LOG_TAG, "Could not write file", ioe);
 		} finally {
 			if (fos != null) {
 				try {

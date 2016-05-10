@@ -2,6 +2,7 @@
 	<string name="app_name">RuntimePermissions</string>
 	<string name="confirm">Confirm</string>
 	<string name="cancel">Cancel</string>
-	<string name="permission_rationale">%1$s permission is needed to %2$s.</string>
+	<string name="permission_rationale">%1$s permission is needed to access %2$s.</string>
+	<string name="permission_rationale_multiple">%1$s permissions are needed to access these operations.</string>
 
 </resources>

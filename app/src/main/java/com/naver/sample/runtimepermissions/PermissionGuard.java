@@ -1,7 +1,6 @@
 package com.naver.sample.runtimepermissions;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.AlertDialog;
 import android.content.pm.PackageManager;
@@ -16,7 +15,7 @@ import android.support.v7.app.AppCompatActivity;
  */
 public class PermissionGuard {
 
-	private static final AtomicInteger requestId = new AtomicInteger(0);
+	private static int requestId = 0;
 	private AppCompatActivity thisActivity;
 
 	public PermissionGuard(@NonNull AppCompatActivity activity) {
@@ -63,8 +62,8 @@ public class PermissionGuard {
 		return rationalePermissions.toArray(new String[0]);
 	}
 
-	private void requestPermission(String[] permission) {
-		ActivityCompat.requestPermissions(thisActivity, permission, requestId.incrementAndGet());
+	private void requestPermission(String[] permissions) {
+		ActivityCompat.requestPermissions(thisActivity, permissions, ++requestId);
 	}
 
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
