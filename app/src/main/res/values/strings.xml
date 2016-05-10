@@ -1,0 +1,7 @@
+<resources>
+	<string name="app_name">RuntimePermissions</string>
+	<string name="confirm">Confirm</string>
+	<string name="cancel">Cancel</string>
+	<string name="permission_rationale">%1$s permission is needed to %2$s.</string>
+
+</resources>
