@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<plurals name="permission_rationale">
+		<item quantity="one">작업을 위해서 %s 권한이 필요합니다.</item>
+		<item quantity="other">작업을 위해서 %s 권한이 필요합니다.</item>
+	</plurals>
+</resources>

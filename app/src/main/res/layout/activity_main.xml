@@ -26,4 +26,14 @@
 		android:layout_height="wrap_content"
 		android:text="MultiPermisson"
 		android:onClick="onClickMultiPermissions"/>
+	<Button
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="SinglePermissonAnnotated"
+		android:onClick="onClickSinglePermissionAnnotated"/>
+	<Button
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="MultiPermissonAnnotated"
+		android:onClick="onClickMultiPermissionsAnnotated"/>
 </LinearLayout>

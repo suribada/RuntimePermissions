@@ -17,10 +17,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.naver.runtimepermissions.PermissionGuard;
+import com.naver.runtimepermissions.PermissionGuardAware;
+import com.naver.runtimepermissions.RequirePermissions;
+
 /**
  * Sample Activity
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PermissionGuardAware {
 
 	private static final String LOG_TAG = "MainActivity";
 
@@ -31,6 +35,14 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		permissionGuard = new PermissionGuard(this);
+	}
+
+	/**
+	 * For using at AOP pointcut
+	 */
+	@Override
+	public PermissionGuard getPermissionGuard() {
+		return permissionGuard;
 	}
 
 	/**
@@ -46,6 +58,14 @@ public class MainActivity extends AppCompatActivity {
 
 	public void onClickMultiPermissions(View view) {
 		permissionGuard.requestPermission(this::writeMyPhoneNumber, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE);
+	}
+
+	public void onClickSinglePermissionAnnotated(View view) {
+		requestLocationUpdateWithAnnotatated();
+	}
+
+	public void onClickMultiPermissionsAnnotated(View view) {
+		writeMyPhoneNumberWithAnnotatated();
 	}
 
 	@Override
@@ -105,6 +125,18 @@ public class MainActivity extends AppCompatActivity {
 			}
 		}
 
+	}
+
+	@RequirePermissions(permissions = {Manifest.permission.ACCESS_FINE_LOCATION})
+	private void requestLocationUpdateWithAnnotatated() {
+		Log.d(LOG_TAG, "requestLocationUpdateWithAnnotatated");
+		requestLocationUpdate();
+	}
+
+	@RequirePermissions(permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+	private void writeMyPhoneNumberWithAnnotatated() {
+		Log.d(LOG_TAG, "writeMyPhoneNumberWithAnnotatated");
+		writeMyPhoneNumber();
 	}
 
 }

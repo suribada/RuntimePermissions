@@ -1,4 +1,4 @@
-package com.naver.sample.runtimepermissions;
+package com.naver.runtimepermissions;
 
 import java.util.ArrayList;
 
@@ -10,8 +10,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import com.naver.sample.runtimepermissions.R;
+
 /**
- * Created by nhn on 16. 5. 4..
+ * Created by Noh.jaechun on 16. 5. 4..
  */
 public class PermissionGuard {
 
@@ -67,7 +69,15 @@ public class PermissionGuard {
 	}
 
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		if (requestCode == requestId) {
+			for (int grantResult : grantResults) {
+				if (grantResult == PackageManager.PERMISSION_DENIED) {
+					/* possibly needs some UI */
+					return;
+				}
+			}
 
+		}
 	}
 
 }
