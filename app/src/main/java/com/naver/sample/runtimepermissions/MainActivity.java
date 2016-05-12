@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements PermissionGuardAw
 	 * neeeds permission ACCESS_FINE_LOCATION
 	 */
 	private void requestLocationUpdate() {
+		Log.d(LOG_TAG, "requestLocationUpdate");
 		LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 60000, new LocationListener() {
 
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements PermissionGuardAw
 	 * neeeds permission WRITE_EXTERNAL_STORAGE, READ_PHONE_STATE
 	 */
 	private void writeMyPhoneNumber() {
+		Log.d(LOG_TAG, "writeMyPhoneNumber");
 		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		String phoneNumber = telephonyManager.getLine1Number();
 		File phoneFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "phone.info");

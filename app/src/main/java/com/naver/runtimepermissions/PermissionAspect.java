@@ -22,7 +22,7 @@ public class PermissionAspect {
 	@Around("annotationPointCutDefinition(requirePermissions)")
 	public void around(ProceedingJoinPoint joinPoint, RequirePermissions requirePermissions) throws Throwable {
 		PermissionGuardAware permissionGuardAware = (PermissionGuardAware) joinPoint.getTarget();
-		/* In Aspsct File, lambda expression fails */
+		/* In Aspect File, lambda expression fails. So 'new Runnable()' is used.  */
 		permissionGuardAware.getPermissionGuard().requestPermission(new Runnable() {
 			@Override
 			public void run() {
