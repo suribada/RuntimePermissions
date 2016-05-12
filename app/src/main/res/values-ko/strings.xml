@@ -2,7 +2,4 @@
 	<string name="app_name">RuntimePermissions</string>
 	<string name="confirm">확인</string>
 	<string name="cancel">취소</string>
-	<string name="permission_rationale">%2$s에 접근하기 위해서 %1$s 권한이 필요합니다.</string>
-	<string name="permission_rationale_multiple">작업을 위해서 %1$s 권한이 필요합니다.</string>
-
 </resources>
