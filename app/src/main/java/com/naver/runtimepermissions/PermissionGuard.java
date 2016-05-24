@@ -34,7 +34,7 @@ public class PermissionGuard {
 			return;
 		}
 		String[] rationalePermissions = shouldShowRequestPermissionRationale(permissions);
-		if (rationalePermissions.length >= 0) {
+		if (rationalePermissions.length > 0) {
 			new AlertDialog.Builder(thisActivity).setMessage(Permissions.getText(thisActivity, rationalePermissions))
 				.setPositiveButton(R.string.confirm, (dialog, which) -> {
 					requestPermission(permissions, runnable);
@@ -71,6 +71,15 @@ public class PermissionGuard {
 	private Subscription subscription;
 
 	private void requestPermission(@NonNull String[] permissions, @NonNull Runnable runnable) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			ArrayList<String> revokedPermissions = new ArrayList<>();
+			for (String permission : permissions) {
+				if (thisActivity.getPackageManager().isPermissionRevokedByPolicy(permission, thisActivity.getPackageName())) {
+					revokedPermissions.add(permission);
+				}
+			}
+			// TODO do not ask again에 대한 처리
+		}
 		ActivityCompat.requestPermissions(thisActivity, permissions, ++requestId);
 		subscription = publishSubject.subscribe(v -> runnable.run());
 	}

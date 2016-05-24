@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements PermissionGuardAw
 	 * Sample method #1
 	 * neeeds permission ACCESS_FINE_LOCATION
 	 */
+	@SuppressWarnings({"MissingPermission"})
 	private void requestLocationUpdate() {
 		Log.d(LOG_TAG, "requestLocationUpdate");
 		LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
