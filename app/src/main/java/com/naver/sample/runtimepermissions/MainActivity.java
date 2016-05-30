@@ -52,7 +52,7 @@ public class MainActivity extends FragmentActivity implements PermissionGuardAwa
 		permissionGuard.resetPermissionsResult();
 	}
 
-	@AskPermission(value = Manifest.permission.READ_PHONE_STATE, resumed = true)
+	@AskPermission(Manifest.permission.READ_PHONE_STATE)
 	private void getMyPhoneNumber() {
 		TelephonyManager telephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
 		String phoneNumber = telephonyManager.getLine1Number();

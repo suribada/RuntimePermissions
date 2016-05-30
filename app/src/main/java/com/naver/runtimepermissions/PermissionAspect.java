@@ -23,7 +23,7 @@ public class PermissionAspect {
 	public void around(ProceedingJoinPoint joinPoint, AskPermission askPermission) throws Throwable {
 		PermissionGuardAware permissionGuardAware = (PermissionGuardAware) joinPoint.getTarget();
 		PermissionGuard permissionGuard = permissionGuardAware.getPermissionGuard();
-		if (askPermission.resumed() && permissionGuard.isPermissionResult()) {
+		if (permissionGuard.isPermissionResult()) {
 			return;
 		}
 		/* In Aspect File, lambda expression fails. So 'new Runnable()' is used.  */

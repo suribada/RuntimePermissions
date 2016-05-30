@@ -14,6 +14,4 @@ public @interface AskPermission {
 
 	String[] value();
 
-	boolean resumed()  default false;
-
 }
