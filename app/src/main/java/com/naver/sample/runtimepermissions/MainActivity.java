@@ -11,20 +11,20 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.naver.runtimepermissions.AskPermission;
 import com.naver.runtimepermissions.PermissionGuard;
 import com.naver.runtimepermissions.PermissionGuardAware;
-import com.naver.runtimepermissions.RequirePermissions;
 
 /**
  * Sample Activity
  */
-public class MainActivity extends AppCompatActivity implements PermissionGuardAware {
+public class MainActivity extends FragmentActivity implements PermissionGuardAware {
 
 	private static final String LOG_TAG = "MainActivity";
 
@@ -35,6 +35,28 @@ public class MainActivity extends AppCompatActivity implements PermissionGuardAw
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		permissionGuard = new PermissionGuard(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		getMyPhoneNumber();
+	}
+
+	@Override
+	protected void onPostResume() {
+		super.onPostResume();
+		 /* In case that onResume() method requires permission, permission dialog appears continuously when deny permissions.
+		  This is an obligate choice.
+		  */
+		permissionGuard.resetPermissionsResult();
+	}
+
+	@AskPermission(value = Manifest.permission.READ_PHONE_STATE, resumed = true)
+	private void getMyPhoneNumber() {
+		TelephonyManager telephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+		String phoneNumber = telephonyManager.getLine1Number();
+		Log.d(LOG_TAG, "phoneNumber=" + phoneNumber);
 	}
 
 	/**
@@ -130,13 +152,13 @@ public class MainActivity extends AppCompatActivity implements PermissionGuardAw
 
 	}
 
-	@RequirePermissions(permissions = {Manifest.permission.ACCESS_FINE_LOCATION})
+	@AskPermission(Manifest.permission.ACCESS_FINE_LOCATION)
 	private void requestLocationUpdateWithAnnotatated() {
 		Log.d(LOG_TAG, "requestLocationUpdateWithAnnotatated");
 		requestLocationUpdate();
 	}
 
-	@RequirePermissions(permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+	@AskPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
 	private void writeMyPhoneNumberWithAnnotatated() {
 		Log.d(LOG_TAG, "writeMyPhoneNumberWithAnnotatated");
 		writeMyPhoneNumber();

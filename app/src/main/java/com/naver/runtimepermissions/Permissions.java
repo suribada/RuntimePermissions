@@ -1,5 +1,6 @@
 package com.naver.runtimepermissions;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import android.content.Context;
@@ -16,7 +17,7 @@ import com.naver.sample.runtimepermissions.R;
  */
 public class Permissions {
 
-	public static String getText(@NonNull Context context, @NonNull String[] permissions) {
+	public static String getText(@NonNull Context context, @NonNull ArrayList<String> permissions) {
 		HashSet<String> groupLabels = new HashSet<>();
 		for (String permission : permissions) {
 			groupLabels.add(getPermissionLabel(context, permission));

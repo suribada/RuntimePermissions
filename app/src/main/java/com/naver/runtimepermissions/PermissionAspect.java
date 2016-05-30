@@ -15,15 +15,19 @@ public class PermissionAspect {
 
 	public static final String LOG_TAG = "PermissionAspect";
 
-	@Pointcut("@annotation(requirePermissions) && execution(* *(..))")
-	public void annotationPointCutDefinition(RequirePermissions requirePermissions){
+	@Pointcut("@annotation(askPermission) && execution(* *(..))")
+	public void annotationPointCutDefinition(AskPermission askPermission){
 	}
 
-	@Around("annotationPointCutDefinition(requirePermissions)")
-	public void around(ProceedingJoinPoint joinPoint, RequirePermissions requirePermissions) throws Throwable {
+	@Around("annotationPointCutDefinition(askPermission)")
+	public void around(ProceedingJoinPoint joinPoint, AskPermission askPermission) throws Throwable {
 		PermissionGuardAware permissionGuardAware = (PermissionGuardAware) joinPoint.getTarget();
+		PermissionGuard permissionGuard = permissionGuardAware.getPermissionGuard();
+		if (askPermission.resumed() && permissionGuard.isPermissionResult()) {
+			return;
+		}
 		/* In Aspect File, lambda expression fails. So 'new Runnable()' is used.  */
-		permissionGuardAware.getPermissionGuard().requestPermission(new Runnable() {
+		permissionGuard.requestPermission(new Runnable() {
 			@Override
 			public void run() {
 				try {
@@ -32,7 +36,7 @@ public class PermissionAspect {
 					Log.d(LOG_TAG, "joinPoint errror", e);
 				}
 			}
-		}, requirePermissions.permissions());
+		}, askPermission.value());
 	}
 
 }

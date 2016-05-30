@@ -2,4 +2,6 @@
 	<string name="app_name">RuntimePermissions</string>
 	<string name="confirm">확인</string>
 	<string name="cancel">취소</string>
+	<string name="ok">예</string>
+	<string name="permissions_do_not_ask_again">\'다시 묻지 않기\'로 거부된 권한이 있습니다. 이것을 바꾸려면 설정 화면으로 이동하세요.</string>
 </resources>

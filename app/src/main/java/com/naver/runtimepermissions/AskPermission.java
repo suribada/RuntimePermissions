@@ -10,8 +10,10 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD })
-public @interface RequirePermissions {
+public @interface AskPermission {
 
-	String[] permissions();
+	String[] value();
+
+	boolean resumed()  default false;
 
 }
