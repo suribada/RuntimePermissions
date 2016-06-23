@@ -1,7 +1,7 @@
 # RuntimePermissions
 
 ## 시작
-1. https://github.com/googlesamples의 Permission 관련 샘플과, 송지철님의 https://oss.navercorp.com/g-chul-song/AndroidPermission 코드 참고
+1. https://github.com/googlesamples의 Permission 관련 샘플 코드 참고
 2. 기존 코드 수정을 최소한으로 할 방법을 생각=>애너테이션을 사용하고 AOP에서 코드를 변경하면 어떨까?
 
 ## 진행
