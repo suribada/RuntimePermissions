@@ -6,14 +6,54 @@
 
 ## 진행
 1. Activity와 UI 의존성이 많으므로 라이브러리로 따로 만들지는 않는다.
-2. `다시 묻지 않기`를 선택하고 권한을 Deny하는 경우, SnackBar에 메시지를 보여주도록 한다.
-3. 권한이 모두 동의되었을 때 하려는 작업을 진행하고, 아니면 아무 것도 하지 않는 간단한 시나리오에만 대응하였다.
+2. 권한이 모두 동의되었을 때 하려는 작업을 진행하고, 아니면 아무 것도 하지 않는 간단한 시나리오에 대응하였고(AOP), 권한을 거부한 경우 특별한 처리가 필요하다면 이 때는 AOP를 사용하지 않고 PermissionGuard를 직접 사용하면 된다. 
+3. `다시 묻지 않기`를 선택하고 권한을 Deny하는 경우, SnackBar에 메시지를 보여주도록 한다(요구사항에 맞게 UI 변경 필요).
 4. onResume() 메서드에서 권한을 필요로 하는 경우, Deny하고서 돌아오면 자꾸 권한을 또 요청하는 케이스에 대응하였다.
+
+## 사용 방법
+1. build.gradle에서 aspectj plugin 추가
+2. com.naver.runtimepermissions 패키지를 복사
+3. com.naver.runtimepermissions.PermissionGuard에서 UI를 커스터마이징(퍼미션 요청 Dialog와 Deny한 경우)
+4. Activity에서는 PermissonGuard 관련 코드 필요
+```
+	private PermissionGuard permissionGuard;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		...
+		permissionGuard = new PermissionGuard(this);
+	}
+
+	@Override
+	protected void onPostResume() {
+		super.onPostResume();
+		 /* In case that onResume() method requires permission, permission dialog appears continuously when deny permissions.
+		  This is an obligate choice.
+		  */
+		permissionGuard.resetPermissionsResult();
+	}
+	
+	/**
+	 * For using at AOP pointcut
+	 */
+	@Override
+	public PermissionGuard getPermissionGuard() {
+		return permissionGuard;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+		@NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		permissionGuard.onRequestPermissionsResult(requestCode, permissions, grantResults);
+	}
+```
 
 ## 샘플 1
 AOP를 사용하지 않는 예. 반드시 AOP를 사용할 필요가 없다.
 ```
-public void onClickSinglePermission(View view) {
+	public void onClickSinglePermission(View view) {
 		permissionGuard.requestPermission(this::requestLocationUpdate, Manifest.permission.ACCESS_FINE_LOCATION);
 	}
 
@@ -38,3 +78,5 @@ AOP를 사용한 예. 샘플을 보면 코드에서 할 게 있긴 하다.
 	}
 ```
 
+## 비슷한 라이브러리
+ https://github.com/canelmas/let 
