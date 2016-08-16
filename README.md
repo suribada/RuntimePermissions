@@ -13,7 +13,7 @@
 ## 사용 방법
 1. build.gradle에서 aspectj plugin 추가
 2. com.naver.runtimepermissions 패키지를 복사
-3. com.naver.runtimepermissions.PermissionGuard에서 UI를 커스터마이징(퍼미션 요청 Dialog와 Deny한 경우)
+3. com.naver.runtimepermissions.PermissionGuard에서 UI를 커스터마이징(퍼미션 요청 Dialog와 Deny한 경우 UI)
 4. Activity에서는 PermissonGuard 관련 코드 필요
 ```java
 	private PermissionGuard permissionGuard;
@@ -79,4 +79,6 @@ AOP를 사용한 예. 샘플을 보면 코드에서 할 게 있긴 하다.
 ```
 
 ## 비슷한 라이브러리
- https://github.com/canelmas/let 
+ https://github.com/canelmas/let
+ 
+ 최초에는 RequirePermission으로 애너테이션을 적용하였으나 Android support annotation에 있는 RequiresPermission과 혼동되어 let 라이브러리에서 쓰는 AskPermission 애너테이션으로 변경
