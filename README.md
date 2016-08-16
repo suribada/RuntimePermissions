@@ -15,7 +15,7 @@
 2. com.naver.runtimepermissions 패키지를 복사
 3. com.naver.runtimepermissions.PermissionGuard에서 UI를 커스터마이징(퍼미션 요청 Dialog와 Deny한 경우)
 4. Activity에서는 PermissonGuard 관련 코드 필요
-```
+```java
 	private PermissionGuard permissionGuard;
 
 	@Override
@@ -52,7 +52,7 @@
 
 ## 샘플 1
 AOP를 사용하지 않는 예. 반드시 AOP를 사용할 필요가 없다.
-```
+```java
 	public void onClickSinglePermission(View view) {
 		permissionGuard.requestPermission(this::requestLocationUpdate, Manifest.permission.ACCESS_FINE_LOCATION);
 	}
@@ -64,7 +64,7 @@ AOP를 사용하지 않는 예. 반드시 AOP를 사용할 필요가 없다.
 
 ## 샘플 2
 AOP를 사용한 예. 샘플을 보면 코드에서 할 게 있긴 하다.
-```
+```java
 	@AskPermission(Manifest.permission.ACCESS_FINE_LOCATION)
 	private void requestLocationUpdateWithAnnotatated() {
 		Log.d(LOG_TAG, "requestLocationUpdateWithAnnotatated");
