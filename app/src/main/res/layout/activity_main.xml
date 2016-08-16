@@ -14,26 +14,31 @@
 	<Button
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="SinglePermisson"
+		android:text="SinglePermisson(Crash)"
 		android:onClick="onClickLocationNoPermissionCheck"/>
 	<Button
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="SinglePermisson"
+		android:text="SinglePermisson(Helper)"
 		android:onClick="onClickSinglePermission"/>
 	<Button
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="MultiPermisson"
+		android:text="MultiPermisson(Helper)"
 		android:onClick="onClickMultiPermissions"/>
 	<Button
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="SinglePermissonAnnotated"
+		android:text="SinglePermisson(Helper, Denied Case)"
+		android:onClick="onClickDenyPermission"/>
+	<Button
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="SinglePermisson(AOP)"
 		android:onClick="onClickSinglePermissionAnnotated"/>
 	<Button
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="MultiPermissonAnnotated"
+		android:text="MultiPermisson(AOP)"
 		android:onClick="onClickMultiPermissionsAnnotated"/>
 </LinearLayout>

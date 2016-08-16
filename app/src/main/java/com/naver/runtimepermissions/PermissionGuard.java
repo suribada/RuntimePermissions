@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -24,7 +25,7 @@ import rx.subjects.PublishSubject;
  */
 public class PermissionGuard {
 
-	private static int requestId = 0;
+	private static final int REQUEST_ID = 128;
 	private FragmentActivity thisActivity;
 	private PublishSubject<Integer> publishSubject;
 	private boolean onPermissonsResult = false;
@@ -36,6 +37,16 @@ public class PermissionGuard {
 
 	@UiThread
 	public void requestPermission(@NonNull Runnable runnable, @NonNull  String... permissions) {
+		requestPermission(runnable, null, permissions);
+	}
+
+	/**
+	 * @param runnable When agreed, this runnable will proceed.
+	 * @param deniedRunnable When agreed, this deniedRunnable will proceed(special case). Usually null is used.
+	 * @param permissions required permissions
+	 */
+	@UiThread
+	public void requestPermission(@NonNull Runnable runnable, @Nullable Runnable deniedRunnable, @NonNull String... permissions) {
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M  || isPermissionsGranted(permissions)) {
 			runnable.run();
 			return;
@@ -44,12 +55,16 @@ public class PermissionGuard {
 		if (rationalePermissions.size() > 0) {
 			new AlertDialog.Builder(thisActivity).setMessage(Permissions.getText(thisActivity, rationalePermissions))
 				.setPositiveButton(R.string.confirm, (dialog, which) -> {
-					requestPermission(permissions, runnable);
+					requestPermission(permissions, runnable, deniedRunnable);
 				})
-				.setNegativeButton(R.string.cancel, null)
+				.setNegativeButton(R.string.cancel, (dialog, which) -> {
+					if (deniedRunnable != null) {
+						deniedRunnable.run();
+					}
+				})
 				.show();
 		} else {
-			requestPermission(permissions, runnable);
+			requestPermission(permissions, runnable, deniedRunnable);
 		}
 	}
 
@@ -77,14 +92,22 @@ public class PermissionGuard {
 
 	private Subscription subscription;
 
-	private void requestPermission(@NonNull String[] permissions, @NonNull Runnable runnable) {
-		ActivityCompat.requestPermissions(thisActivity, permissions, ++requestId);
-		subscription = publishSubject.subscribe(v -> runnable.run());
+	private void requestPermission(@NonNull String[] permissions, @NonNull Runnable runnable, @Nullable Runnable deniedRunnable) {
+		ActivityCompat.requestPermissions(thisActivity, permissions, REQUEST_ID);
+		subscription = publishSubject.subscribe(v -> {
+			if (v == PackageManager.PERMISSION_GRANTED) {
+				runnable.run();
+			} else {
+				if (deniedRunnable != null) {
+					deniedRunnable.run();
+				}
+			}
+		});
 	}
 
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 		onPermissonsResult = true;
-		if (requestCode == requestId) {
+		if (requestCode == REQUEST_ID) {
 			boolean allAgreed = true;
 			ArrayList<String> revokedPermissions = new ArrayList<>();
 			for (int i = 0, len = permissions.length;  i < len ; i++) {
@@ -110,9 +133,7 @@ public class PermissionGuard {
 					.show();
 
 			}
-			if (allAgreed) {
-				publishSubject.onNext(PackageManager.PERMISSION_GRANTED);
-			}
+			publishSubject.onNext(allAgreed ? PackageManager.PERMISSION_GRANTED : PackageManager.PERMISSION_DENIED);
 			subscription.unsubscribe();
 		}
 	}

@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -82,6 +83,12 @@ public class MainActivity extends FragmentActivity implements PermissionGuardAwa
 		permissionGuard.requestPermission(this::writeMyPhoneNumber, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE);
 	}
 
+	public void onClickDenyPermission(View view) {
+		permissionGuard.requestPermission(this::requestLocationUpdate, () -> {
+			Toast.makeText(MainActivity.this, "Why do you deny this permission?", Toast.LENGTH_LONG).show();
+		}, Manifest.permission.ACCESS_FINE_LOCATION);
+	}
+
 	public void onClickSinglePermissionAnnotated(View view) {
 		requestLocationUpdateWithAnnotatated();
 	}
@@ -134,6 +141,10 @@ public class MainActivity extends FragmentActivity implements PermissionGuardAwa
 		Log.d(LOG_TAG, "writeMyPhoneNumber");
 		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		String phoneNumber = telephonyManager.getLine1Number();
+		if (TextUtils.isEmpty(phoneNumber)) {
+			Log.e(LOG_TAG, "Phone Number not exists"); // Tablet etc
+			return;
+		}
 		File phoneFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "phone.info");
 		FileOutputStream fos = null;
 		try {
